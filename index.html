@@ -1,24 +1,33 @@
 
 <!DOCTYPE html>
 <html lang="zh">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Spiny Mouse 文獻檢索</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <style>
-      body { font-family: sans-serif; padding: 2em; max-width: 800px; margin: auto; background: #f9fafb; }
-      .card { background: white; border: 1px solid #ccc; padding: 1em; margin: 1em 0; border-radius: 8px; }
-      .card h2 { font-size: 1.2em; margin-bottom: 0.3em; }
-    </style>
-  </head>
-  <body>
+<head>
+  <meta charset="UTF-8" />
+  <title>Spiny Mouse 文獻檢索</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="app">
     <h1>Spiny Mouse 文獻檢索</h1>
-    <p>靜態版本示意（僅作部署用）</p>
-    <div class="card">
-      <h2>Spiny Mouse and Regeneration</h2>
-      <p><strong>主題：</strong>Regeneration ｜ <strong>國家：</strong>USA ｜ <strong>年份：</strong>2023</p>
-      <a href="https://doi.org/10.xxxx/example" target="_blank">DOI 連結</a>
-    </div>
-    <p>如需完整搜尋功能，請使用本地 Vite 專案或 GitHub Pages + build 完整前端。</p>
-  </body>
+    <input id="search" placeholder="輸入關鍵字搜尋" />
+    <div id="result"></div>
+  </div>
+  <script src="data.js"></script>
+  <script>
+    const input = document.getElementById("search");
+    const result = document.getElementById("result");
+    input.addEventListener("input", () => {
+      const q = input.value.toLowerCase();
+      const hits = data.filter(d => d.title && d.title.toLowerCase().includes(q));
+      result.innerHTML = hits.map(item => \`
+        <div class="card">
+          <h2>\${item.title}</h2>
+          <p><strong>主題：</strong>\${item.topic}｜<strong>國家：</strong>\${item.country}｜<strong>器官：</strong>\${item.organ}</p>
+          <p><strong>期刊：</strong>\${item.journal}（\${item.year}）</p>
+          <p><a href="https://doi.org/\${item.doi}" target="_blank">DOI 連結</a></p>
+        </div>\`).join('');
+    });
+  </script>
+</body>
 </html>
